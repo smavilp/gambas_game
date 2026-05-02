@@ -130,6 +130,7 @@ body {
 </div>
 
 <button onclick="cruzar()">Cruzar</button>
+<button onclick="venderSeleccionada()">💸 Vender seleccionada</button>
 
 <script>
 let tank = document.getElementById("tank");
@@ -245,36 +246,29 @@ function crearGambaPool(){
   pool.appendChild(div);
 }
 
-// ⌨️ vender con espacio
-document.addEventListener("keydown", function(e){
+function venderSeleccionada(){
 
-  if(e.code === "Space"){
-    e.preventDefault();
-
-    // 🔴 validar que exista selección
-    if(!gambaSeleccionadaPool) return;
-
-    let { div } = gambaSeleccionadaPool;
-
-    // 🔴 validar que aún esté en el DOM
-    if(!div || !pool.contains(div)){
-      gambaSeleccionadaPool = null;
-      return;
-    }
-
-    // ✅ ahora sí vender
-    monedas += 3;
-    actualizarMonedas();
-
-    pool.removeChild(div);
-    crearGambaPool();
-
-    // 🔥 limpiar selección
-    gambaSeleccionadaPool = null;
+  if(!gambaSeleccionadaPool){
+    alert("Selecciona una gamba para vender");
+    return;
   }
 
-});
+  let { div } = gambaSeleccionadaPool;
 
+  // validar que exista
+  if(!div || !pool.contains(div)){
+    gambaSeleccionadaPool = null;
+    return;
+  }
+
+  monedas += 3;
+  actualizarMonedas();
+
+  pool.removeChild(div);
+  crearGambaPool();
+
+  gambaSeleccionadaPool = null;
+}
 // 🦐 TANQUE
 function crearGamba(g){
   let div = document.createElement("div");
