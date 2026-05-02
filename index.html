@@ -1,310 +1,34 @@
-<script>
-let tank = document.getElementById("tank");
-let pool = document.getElementById("pool");
-let prestigio = 0
-let gambas = [];
-let seleccionadas = [];
-let monedas = 20;
-let objetivo;
-let objetivoTimer = null;
-
-function actualizarMonedas(){
-  document.getElementById("coins").innerText = monedas;
-}
-
-// 🎨 color
-function randomColor(){
-  return {
-    r:Math.floor(Math.random()*256),
-    g:Math.floor(Math.random()*256),
-    b:Math.floor(Math.random()*256)
-  };
-}
-
-function rgb(c){
-  return `rgb(${c.r},${c.g},${c.b})`;
-}
-
-// 🎯 objetivo
-function generarObjetivo(){
-
-  objetivo = randomColor();
-  document.getElementById("goal").style.background = rgb(objetivo);
-
-  // 🔥 limpiar timer anterior
-  if(objetivoTimer){
-    clearTimeout(objetivoTimer);
-  }
-
-  // ⏳ nuevo timer de 8 min
-  objetivoTimer = setTimeout(() => {
-    alert("⏳ El objetivo cambió por tiempo");
-    generarObjetivo();
-  }, 480000); // 8 minutos
-}
-
-function distancia(a,b){
-  return Math.sqrt(
-    (a.r-b.r)**2 +
-    (a.g-b.g)**2 +
-    (a.b-b.b)**2
-  );
-}
-
-// 🦐 POOL
-function crearGambaPool(){
-
-  let g = {
-  id: crypto.randomUUID(),
-  color: randomColor(),
-  sexo: Math.random() < 0.5 ? "♂" : "♀"
-};
-
-  let div = document.createElement("div");
-  div.className = "shrimp pool-shrimp";
-
-  let color = rgb(g.color);
-
-  let tail = document.createElement("div");
-  tail.className = "tail";
-  tail.style.background = color;
-  div.appendChild(tail);
-
-  for(let i=0;i<2;i++){
-    let seg = document.createElement("div");
-    seg.className = "segment";
-    seg.style.background = color;
-    div.appendChild(seg);
-  }
-
-  let head = document.createElement("div");
-  head.className = "head";
-  head.style.background = color;
-  let sexoLabel = document.createElement("div");
-  sexoLabel.innerText = g.sexo;
-  sexoLabel.style.fontSize = "8px";
-  sexoLabel.style.position = "absolute";
-  sexoLabel.style.top = "-6px";
-
-
-
-  head.appendChild(sexoLabel);
-
-  let eye = document.createElement("div");
-  eye.className = "eye";
-  head.appendChild(eye);
-
-  div.appendChild(head);
-  pool.appendChild(div);
-  // comprar
-  div.addEventListener("dblclick", function(){
-
-    if(monedas < 5){
-      alert("No tienes monedas");
-      return;
-    }
-
-    monedas -= 5;
-    actualizarMonedas();
-
-    pool.removeChild(div);
-
-    crearGamba({
-      id: g.id,
-      color: g.color,
-      sexo:g.sexo,
-      x: Math.random()*580,
-      y: Math.random()*280,
-      vx:(Math.random()-0.5)*0.4,
-      vy:(Math.random()-0.5)*0.4
-    });
-
-  });
-
-}
-
-// 🐠 TANQUE
-function crearGamba(g){
-
-  let div = document.createElement("div");
-  div.className = "shrimp";
-
-  let color = rgb(g.color);
-
-  let tail = document.createElement("div");
-  tail.className = "tail";
-  tail.style.background = color;
-  div.appendChild(tail);
-
-  for(let i=0;i<2;i++){
-    let seg = document.createElement("div");
-    seg.className = "segment";
-    seg.style.background = color;
-    div.appendChild(seg);
-  }
-
-  let head = document.createElement("div");
-  head.className = "head";
-  head.style.background = color;
-  
-  let eye = document.createElement("div");
-  eye.className = "eye";
-  head.appendChild(eye);
-  let sexoLabel = document.createElement("div");
-  sexoLabel.innerText = g.sexo;
-
-  sexoLabel.style.fontSize = "10px";
-  sexoLabel.style.position = "absolute";
-  sexoLabel.style.top = "-8px";
-  sexoLabel.style.left = "2px";
-  sexoLabel.style.color = g.sexo === "♂" ? "blue" : "deeppink";
-
-  head.appendChild(sexoLabel);
-  div.appendChild(head);
-
-  // selección (máx 2)
-  div.addEventListener("click", function(){
-
-    let i = seleccionadas.indexOf(g);
-
-    if(i >= 0){
-      seleccionadas.splice(i,1);
-    } else if(seleccionadas.length < 2){
-      seleccionadas.push(g);
-    }
-
-    gambas.forEach(x=>{
-      x.el.classList.toggle("selected", seleccionadas.includes(x));
-    });
-  });
-
-  tank.appendChild(div);
-
-  g.el = div;
-  gambas.push(g);
-}
-function generarPool(){
-
-  // limpiar pool
-  pool.innerHTML = "";
-
-  // crear 10 nuevas gambas
-  for(let i=0;i<8;i++){
-    crearGambaPool();
-  }
-}
-// 💸 vender
-function venderGambaTanque(){
-
-  if(seleccionadas.length === 0){
-    alert("Selecciona una gamba");
-    return;
-  }
-
-  let g = seleccionadas[0];
-
-  tank.removeChild(g.el);
-  gambas = gambas.filter(x=>x!==g);
-  seleccionadas = seleccionadas.filter(x=>x!==g);
-
-  monedas += 4;
-  actualizarMonedas();
-}
-
-// 🧬 cruzar
-function mezclar(a,b){
-  return {
-    r:Math.floor((a.r+b.r)/2),
-    g:Math.floor((a.g+b.g)/2),
-    b:Math.floor((a.b+b.b)/2)
-  };
-}
-
-function cruzar(){
-
-  if(seleccionadas.length !== 2){
-    alert("Selecciona 2 gambas");
-    return;
-  }
-
-  let [a,b] = seleccionadas;
-
-  if(a.sexo === b.sexo){
-    alert("❌ Estas gambas no son compatibles");
-    return;
-  }
-
-  let c = mezclar(a.color,b.color);
-
-  crearGamba({
-    id:Date.now(),
-    color:c,
-    sexo: Math.random() < 0.5 ? "♂" : "♀",
-    x:Math.random()*580,
-    y:Math.random()*280,
-    vx:(Math.random()-0.5)*0.4,
-    vy:(Math.random()-0.5)*0.4
-  });
-
-  seleccionadas = [];
-
-  if(distancia(c, objetivo) < 40){
-
-    alert("🎉 Objetivo logrado!");
-
-    monedas += 10;
-    actualizarMonedas();
-
-    prestigio += 1;
-    actualizarPrestigio();
-
-    generarObjetivo();
-  }
-}
-
-// movimiento
-function loop(){
-  gambas.forEach(g=>{
-    g.x += g.vx;
-    g.y += g.vy;
-
-    if(g.x<0||g.x>580) g.vx*=-1;
-    if(g.y<0||g.y>280) g.vy*=-1;
-
-    g.el.style.left = g.x+"px";
-    g.el.style.top = g.y+"px";
-
-    let angle = Math.atan2(g.vy, g.vx);
-    g.el.style.transform = `rotate(${angle}rad)`;
-  });
-
-  requestAnimationFrame(loop);
-}
-
-setInterval(() => {
-  generarPool();
-  alert("🔄 El mercado se ha renovado");
-}, 300000); // 5 minutos
-
-function renovarPool(){
-
-  if(monedas < 15){
-    alert("No tienes suficientes monedas");
-    return;
-  }
-
-  monedas -= 15;
-  actualizarMonedas();
-
-  generarPool();
-}
-function actualizarPrestigio(){
-  document.getElementById("prestigio").innerText = prestigio;
-}
-// init
-for(let i=0;i<8;i++) crearGambaPool();
-generarObjetivo();
-actualizarMonedas();
-loop();
-actualizarPrestigio();
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gambas Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Gambas Game</h1>
+    </header>
+    <main>
+        <div id="game"></div>
+        <button id="startBtn">Start Game</button>
+    </main>
+    <footer>
+        <p>&copy; 2026 Gambas Game</p>
+    </footer>
+    <script>
+        let gameInterval;
+        const startGame = () => {
+            gameInterval = setInterval(() => {
+                console.log('Game is running');
+            }, 1000);
+        };
+        const cruzar = () => {
+            // Implement functionality of cruzar
+            seleccionadas = [];
+        };
+        document.getElementById('startBtn').addEventListener('click', startGame);
+    </script>
+</body>
+</html>
