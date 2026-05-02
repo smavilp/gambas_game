@@ -308,6 +308,8 @@ function crearGamba(g){
 
   head.appendChild(sexoLabel);
 
+  let edadLabel = document.createElement("div");
+  g.labelRepro = edadLabel;
   div.appendChild(head);
 
   // selección (máx 2)
@@ -377,6 +379,11 @@ function cruzar(){
 
   let [a,b] = seleccionadas;
 
+  if(a.reproducciones >= a.maxReproducciones || b.reproducciones >= b.maxReproducciones){
+  alert("❌ Una de las gambas ya no puede reproducirse");
+  return;
+}
+
   if(a.sexo === b.sexo){
   alert("❌ Estas gambas no son compatibles");
   return;
@@ -395,6 +402,9 @@ function cruzar(){
     vx:(Math.random()-0.5)*0.4,
     vy:(Math.random()-0.5)*0.4
   });
+
+  a.reproducciones++;
+  b.reproducciones++;
 
   // 🎯 check objetivo
 if(distancia(c, objetivo) < 40){
