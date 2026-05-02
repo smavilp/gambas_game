@@ -244,7 +244,7 @@ function crearGambaPool(){
     crearGamba({
       id: g.id,
       color: g.color,
-      sexo:g.sexo
+      sexo:g.sexo,
       x: Math.random()*580,
       y: Math.random()*280,
       vx:(Math.random()-0.5)*0.4,
@@ -291,7 +291,7 @@ function crearGamba(g){
   sexoLabel.style.left = "2px";
   sexoLabel.style.color = g.sexo === "♂" ? "blue" : "deeppink";
 
-head.appendChild(sexoLabel);
+  head.appendChild(sexoLabel);
   div.appendChild(head);
 
   // selección (máx 2)
@@ -353,13 +353,6 @@ function mezclar(a,b){
 }
 
 function cruzar(){
-  let [a,b] = seleccionadas;
-
-// 🚫 misma sexo → no cruza
-if(a.sexo === b.sexo){
-  alert("❌ Estas gambas no son compatibles");
-  return;
-}
 
   if(seleccionadas.length !== 2){
     alert("Selecciona 2 gambas");
@@ -368,16 +361,36 @@ if(a.sexo === b.sexo){
 
   let [a,b] = seleccionadas;
 
+  if(a.sexo === b.sexo){
+    alert("❌ Estas gambas no son compatibles");
+    return;
+  }
+
   let c = mezclar(a.color,b.color);
 
   crearGamba({
     id:Date.now(),
     color:c,
+    sexo: Math.random() < 0.5 ? "♂" : "♀",
     x:Math.random()*580,
     y:Math.random()*280,
     vx:(Math.random()-0.5)*0.4,
     vy:(Math.random()-0.5)*0.4
   });
+
+  if(distancia(c, objetivo) < 40){
+
+    alert("🎉 Objetivo logrado!");
+
+    monedas += 10;
+    actualizarMonedas();
+
+    prestigio += 1;
+    actualizarPrestigio();
+
+    generarObjetivo();
+  }
+}
 
   // 🎯 check objetivo
 if(distancia(c, objetivo) < 40){
