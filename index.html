@@ -1,135 +1,3 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Gambas Game</title>
-
-<style>
-body {
-  background: linear-gradient(to bottom, #e6f7ff, #cceeff);
-  color:#1b2a3a;
-  text-align:center;
-  font-family:Arial;
-  margin:0;
-}
-
-.tank {
-  width:600px;
-  height:300px;
-  background: linear-gradient(to bottom, #b3ecff, #80dfff);
-  margin:20px auto;
-  position:relative;
-  overflow:hidden;
-  border:4px solid white;
-  border-radius:12px;
-}
-
-.shrimp {
-  position:absolute;
-  width:30px;
-  height:14px;
-  display:flex;
-  align-items:center;
-  transform-origin:center;
-  cursor:pointer;
-}
-
-.segment {
-  width:8px;
-  height:12px;
-  background:inherit;
-  border-radius:3px;
-  margin-right:1px;
-}
-
-.head {
-  width:10px;
-  height:12px;
-  background:inherit;
-  border-radius:4px;
-  position:relative;
-}
-
-.eye {
-  width:3px;
-  height:3px;
-  background:black;
-  border-radius:50%;
-  position:absolute;
-  right:2px;
-  top:3px;
-}
-
-.tail {
-  width:6px;
-  height:6px;
-  background:inherit;
-  margin-right:2px;
-  animation: wag 0.25s infinite alternate;
-}
-
-@keyframes wag {
-  0% { transform: rotate(-20deg); }
-  100% { transform: rotate(20deg); }
-}
-
-.selected {
-  outline:3px solid yellow;
-}
-
-.goal {
-  width:40px;
-  height:40px;
-  margin:10px auto;
-  border:2px solid black;
-}
-
-#pool {
-  width:200px;
-  border:2px dashed #aaccee;
-  padding:10px;
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-  align-items:center;
-}
-
-.pool-shrimp {
-  transform: scale(1.8);
-  position:static !important;
-}
-</style>
-
-</head>
-<body>
-
-<h2>🦐 Gambas Game</h2>
-<h3>💰 Monedas: <span id="coins">20</span></h3>
-<h3>⭐ Prestigio: <span id="prestigio">0</span></h3>
-<h3>🎯 Objetivo</h3>
-<div id="goal" class="goal"></div>
-
-<div style="display:flex; justify-content:center; gap:40px;">
-
-  <div>
-    <h3>🦐 Mercado</h3>
-    <div id="pool"></div>
-    <br>
-    <button onclick="renovarPool()">🔄 Pedido especial (15💰)</button>
-  </div>
-
-  <div>
-    <h3>🐠 Tanque</h3>
-    <div class="tank" id="tank"></div>
-  </div>
-
-</div>
-
-<br>
-
-<button onclick="cruzar()">🧬 Cruzar</button>
-<button onclick="venderGambaTanque()">💸 Vender seleccionada</button>
-
 <script>
 let tank = document.getElementById("tank");
 let pool = document.getElementById("pool");
@@ -378,6 +246,8 @@ function cruzar(){
     vy:(Math.random()-0.5)*0.4
   });
 
+  seleccionadas = [];
+
   if(distancia(c, objetivo) < 40){
 
     alert("🎉 Objetivo logrado!");
@@ -390,23 +260,6 @@ function cruzar(){
 
     generarObjetivo();
   }
-}
-
-  // 🎯 check objetivo
-if(distancia(c, objetivo) < 40){
-
-  alert("🎉 Objetivo logrado!");
-
-  // 💰 recompensa opcional
-  monedas += 10;
-  actualizarMonedas();
-
-  // ⭐ prestigio
-  prestigio += 1;
-  actualizarPrestigio();
-
-  generarObjetivo();
-}
 }
 
 // movimiento
@@ -427,9 +280,8 @@ function loop(){
 
   requestAnimationFrame(loop);
 }
-  
-setInterval
-  (() => {
+
+setInterval(() => {
   generarPool();
   alert("🔄 El mercado se ha renovado");
 }, 300000); // 5 minutos
@@ -456,6 +308,3 @@ actualizarMonedas();
 loop();
 actualizarPrestigio();
 </script>
-
-</body>
-</html>
