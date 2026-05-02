@@ -249,19 +249,30 @@ function crearGambaPool(){
 document.addEventListener("keydown", function(e){
 
   if(e.code === "Space"){
+    e.preventDefault();
 
+    // 🔴 validar que exista selección
     if(!gambaSeleccionadaPool) return;
 
     let { div } = gambaSeleccionadaPool;
 
+    // 🔴 validar que aún esté en el DOM
+    if(!div || !pool.contains(div)){
+      gambaSeleccionadaPool = null;
+      return;
+    }
+
+    // ✅ ahora sí vender
     monedas += 3;
     actualizarMonedas();
 
     pool.removeChild(div);
     crearGambaPool();
 
+    // 🔥 limpiar selección
     gambaSeleccionadaPool = null;
   }
+
 });
 
 // 🦐 TANQUE
