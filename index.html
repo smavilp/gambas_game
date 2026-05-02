@@ -186,10 +186,11 @@ function distancia(a,b){
 // 🦐 POOL
 function crearGambaPool(){
 
-  let g = {
-    id: crypto.randomUUID(),
-    color: randomColor()
-  };
+let g = {
+  id: crypto.randomUUID(),
+  color: randomColor(),
+  sexo: Math.random() < 0.5 ? "♂" : "♀"
+};
 
   let div = document.createElement("div");
   div.className = "shrimp pool-shrimp";
@@ -215,7 +216,15 @@ function crearGambaPool(){
   let eye = document.createElement("div");
   eye.className = "eye";
   head.appendChild(eye);
-
+  
+  let sexoLabel = document.createElement("div");
+  sexoLabel.innerText = g.sexo;
+  sexoLabel.style.fontSize = "8px";
+  sexoLabel.style.position = "absolute";
+  sexoLabel.style.top = "-6px";
+  sexoLabel.style.color = g.sexo === "♂" ? "blue" : "deeppink";
+  head.appendChild(sexoLabel);
+  
   div.appendChild(head);
   pool.appendChild(div);
   // comprar
@@ -231,9 +240,10 @@ function crearGambaPool(){
 
     pool.removeChild(div);
 
-    crearGamba({
+  crearGamba({
       id: g.id,
       color: g.color,
+      sexo: g.sexo,
       x: Math.random()*580,
       y: Math.random()*280,
       vx:(Math.random()-0.5)*0.4,
@@ -271,6 +281,16 @@ function crearGamba(g){
   let eye = document.createElement("div");
   eye.className = "eye";
   head.appendChild(eye);
+
+  let sexoLabel = document.createElement("div");
+  sexoLabel.innerText = g.sexo;
+  sexoLabel.style.fontSize = "10px";
+  sexoLabel.style.position = "absolute";
+  sexoLabel.style.top = "-8px";
+  sexoLabel.style.left = "2px";
+  sexoLabel.style.color = g.sexo === "♂" ? "blue" : "deeppink";
+
+  head.appendChild(sexoLabel);
 
   div.appendChild(head);
 
@@ -341,11 +361,17 @@ function cruzar(){
 
   let [a,b] = seleccionadas;
 
+  if(a.sexo === b.sexo){
+  alert("❌ Estas gambas no son compatibles");
+  return;
+  }
+
   let c = mezclar(a.color,b.color);
 
   crearGamba({
     id:Date.now(),
     color:c,
+    sexo: Math.random() < 0.5 ? "♂" : "♀",
     x:Math.random()*580,
     y:Math.random()*280,
     vx:(Math.random()-0.5)*0.4,
