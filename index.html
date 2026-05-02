@@ -188,7 +188,7 @@ function generarObjetivo(){
 function crearGambaPool(){
 
   let g = {
-    id: Date.now() + Math.random(),
+    id: crypto.randomUUID()
     color: randomColor()
   };
 
@@ -383,7 +383,9 @@ function loop(){
 
   requestAnimationFrame(loop);
 }
-
+for(let i = 0; i < 6; i++){
+  crearGambaPool();
+}
 
 generarObjetivo();
 loop();
