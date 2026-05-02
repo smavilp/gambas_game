@@ -27,21 +27,6 @@ body {
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-.tank::after {
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.4),
-    rgba(255,255,255,0.05)
-  );
-  pointer-events:none;
-}
-
 .shrimp {
   position:absolute;
   width:30px;
@@ -125,6 +110,7 @@ body {
 
 <h2>🦐 Gambas Game</h2>
 <h3>💰 Monedas: <span id="coins">50</span></h3>
+<p>🖱 Click: seleccionar | Doble click: comprar | Espacio: vender</p>
 
 <h3>🎯 Objetivo</h3>
 <div id="goal" class="goal"></div>
@@ -154,11 +140,13 @@ let seleccionadas = [];
 let objetivo;
 let monedas = 50;
 
+// 🔥 NUEVO
+let gambaSeleccionadaPool = null;
+
 function actualizarMonedas(){
   document.getElementById("coins").innerText = monedas;
 }
 
-// 🎨 color
 function randomColor(){
   return {
     r:Math.floor(Math.random()*256),
@@ -184,7 +172,7 @@ function generarObjetivo(){
   document.getElementById("goal").style.background = rgb(objetivo);
 }
 
-// 🦐 crear pool
+// 🦐 POOL
 function crearGambaPool(){
 
   let g = {
@@ -219,8 +207,18 @@ function crearGambaPool(){
 
   div.appendChild(head);
 
-  // 🟢 comprar
+  // 🟡 seleccionar
   div.addEventListener("click", function(){
+    document.querySelectorAll(".pool-shrimp").forEach(el=>{
+      el.style.outline = "none";
+    });
+
+    div.style.outline = "3px solid red";
+    gambaSeleccionadaPool = { div, g };
+  });
+
+  // 🟢 comprar
+  div.addEventListener("dblclick", function(){
 
     if(monedas < 5){
       alert("💸 No tienes suficientes monedas");
@@ -244,21 +242,29 @@ function crearGambaPool(){
     crearGambaPool();
   });
 
-  // 🔴 vender
-  div.addEventListener("contextmenu", function(e){
-    e.preventDefault();
+  pool.appendChild(div);
+}
+
+// ⌨️ vender con espacio
+document.addEventListener("keydown", function(e){
+
+  if(e.code === "Space"){
+
+    if(!gambaSeleccionadaPool) return;
+
+    let { div } = gambaSeleccionadaPool;
 
     monedas += 3;
     actualizarMonedas();
 
     pool.removeChild(div);
     crearGambaPool();
-  });
 
-  pool.appendChild(div);
-}
+    gambaSeleccionadaPool = null;
+  }
+});
 
-// 🦐 tanque
+// 🦐 TANQUE
 function crearGamba(g){
   let div = document.createElement("div");
   div.className = "shrimp";
@@ -295,7 +301,6 @@ function crearGamba(g){
   gambas.push(g);
 }
 
-// selección
 function toggle(g){
   let i = seleccionadas.indexOf(g);
 
@@ -307,7 +312,6 @@ function toggle(g){
   });
 }
 
-// cruzar
 function mezclar(a,b){
   return {
     r:Math.floor((a.r+b.r)/2),
@@ -323,6 +327,7 @@ function cruzar(){
   }
 
   let [a,b] = seleccionadas;
+
   let n = Math.floor(Math.random()*6);
 
   for(let i=0;i<n;i++){
@@ -344,7 +349,6 @@ function cruzar(){
   }
 }
 
-// movimiento
 function loop(){
   gambas.forEach(g=>{
     g.x += g.vx;
@@ -363,12 +367,12 @@ function loop(){
   requestAnimationFrame(loop);
 }
 
-// init
-for(let i=0;i<8;i++) crearGambaPool();
+// INIT
+for(let i=0;i<10;i++) crearGambaPool();
+
 generarObjetivo();
 actualizarMonedas();
 loop();
-
 </script>
 
 </body>
