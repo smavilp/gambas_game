@@ -157,6 +157,18 @@ function rgb(c){
   return `rgb(${c.r},${c.g},${c.b})`;
 }
 
+function generarReproduccionesMax(){
+
+  let r = Math.random();
+
+  if(r < 0.10) return 0;
+  if(r < 0.30) return 1;
+  if(r < 0.60) return 2;
+  if(r < 0.85) return 3;
+  if(r < 0.95) return 4;
+  return 5;
+}
+
 // 🎯 objetivo
 function generarObjetivo(){
 
@@ -189,7 +201,9 @@ function crearGambaPool(){
 let g = {
   id: crypto.randomUUID(),
   color: randomColor(),
-  sexo: Math.random() < 0.5 ? "♂" : "♀"
+  sexo: Math.random() < 0.5 ? "♂" : "♀",
+  reproducciones: 0,
+  maxReproducciones: generarReproduccionesMax()
 };
 
   let div = document.createElement("div");
@@ -244,6 +258,8 @@ let g = {
       id: g.id,
       color: g.color,
       sexo: g.sexo,
+      reproducciones: 0,
+      maxReproducciones: g.maxReproducciones,
       x: Math.random()*580,
       y: Math.random()*280,
       vx:(Math.random()-0.5)*0.4,
@@ -372,6 +388,8 @@ function cruzar(){
     id:Date.now(),
     color:c,
     sexo: Math.random() < 0.5 ? "♂" : "♀",
+    reproducciones: 0,
+    maxReproducciones: generarReproduccionesMax(),
     x:Math.random()*580,
     y:Math.random()*280,
     vx:(Math.random()-0.5)*0.4,
@@ -435,6 +453,7 @@ function renovarPool(){
 function actualizarPrestigio(){
   document.getElementById("prestigio").innerText = prestigio;
 }
+
 // init
 for(let i=0;i<8;i++) crearGambaPool();
 generarObjetivo();
