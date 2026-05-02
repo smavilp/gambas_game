@@ -187,9 +187,10 @@ function distancia(a,b){
 function crearGambaPool(){
 
   let g = {
-    id: crypto.randomUUID(),
-    color: randomColor()
-  };
+  id: crypto.randomUUID(),
+  color: randomColor(),
+  sexo: Math.random() < 0.5 ? "♂" : "♀"
+};
 
   let div = document.createElement("div");
   div.className = "shrimp pool-shrimp";
@@ -211,6 +212,15 @@ function crearGambaPool(){
   let head = document.createElement("div");
   head.className = "head";
   head.style.background = color;
+  let sexoLabel = document.createElement("div");
+  sexoLabel.innerText = g.sexo;
+  sexoLabel.style.fontSize = "8px";
+  sexoLabel.style.position = "absolute";
+  sexoLabel.style.top = "-6px";
+
+
+
+  head.appendChild(sexoLabel);
 
   let eye = document.createElement("div");
   eye.className = "eye";
@@ -267,11 +277,20 @@ function crearGamba(g){
   let head = document.createElement("div");
   head.className = "head";
   head.style.background = color;
-
+  
   let eye = document.createElement("div");
   eye.className = "eye";
   head.appendChild(eye);
+  let sexoLabel = document.createElement("div");
+  sexoLabel.innerText = g.sexo;
 
+  sexoLabel.style.fontSize = "10px";
+  sexoLabel.style.position = "absolute";
+  sexoLabel.style.top = "-8px";
+  sexoLabel.style.left = "2px";
+  sexoLabel.style.color = g.sexo === "♂" ? "blue" : "deeppink";
+
+head.appendChild(sexoLabel);
   div.appendChild(head);
 
   // selección (máx 2)
@@ -333,6 +352,13 @@ function mezclar(a,b){
 }
 
 function cruzar(){
+  let [a,b] = seleccionadas;
+
+// 🚫 misma sexo → no cruza
+if(a.sexo === b.sexo){
+  alert("❌ Estas gambas no son compatibles");
+  return;
+}
 
   if(seleccionadas.length !== 2){
     alert("Selecciona 2 gambas");
