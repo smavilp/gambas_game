@@ -178,6 +178,7 @@ body {
 <button onclick="cruzar()">Cruzar</button>
 
 <script>
+document.addEventListener("contextmenu", e => e.preventDefault());
 let tank = document.getElementById("tank");
 let gambas = [];
 let seleccionadas = [];
@@ -277,14 +278,41 @@ function crearGambaPool(){
     vy:(Math.random()-0.5)*0.4
   });
 
-  div.addEventListener("contextmenu", function(e){
-  e.preventDefault(); // 
+  div.addEventListener("mousedown", function(e){
 
-  monedas += 3;
-  actualizarMonedas();
+  // clic izquierdo = comprar
+  if(e.button === 0){
+    if(monedas < 5){
+      alert("💸 No tienes suficientes monedas");
+      return;
+    }
 
-  pool.removeChild(div);
-  crearGambaPool();
+    monedas -= 5;
+    actualizarMonedas();
+
+    pool.removeChild(div);
+
+    crearGamba({
+      id: g.id,
+      color: g.color,
+      x: Math.random()*580,
+      y: Math.random()*280,
+      vx:(Math.random()-0.5)*0.4,
+      vy:(Math.random()-0.5)*0.4
+    });
+
+    crearGambaPool();
+  }
+
+  // clic derecho = vender
+  if(e.button === 2){
+    monedas += 3;
+    actualizarMonedas();
+
+    pool.removeChild(div);
+    crearGambaPool();
+  }
+
 });
 
   crearGambaPool(); // reponer
