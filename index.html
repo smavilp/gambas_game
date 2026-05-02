@@ -131,7 +131,9 @@ body {
       border:2px dashed white;
       padding:10px;
       display:flex;
-      flex-direction:column;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
       gap:10px;
       align-items:center;
     "></div>
@@ -188,7 +190,7 @@ function generarObjetivo(){
 function crearGambaPool(){
 
   let g = {
-    id: crypto.randomUUID()
+    id: crypto.randomUUID(),
     color: randomColor()
   };
 
@@ -358,10 +360,7 @@ function cruzar(){
   seleccionadas = [];
 }
 
-for(let i=0;i<6;i++){
-  crearGambaPool();
-}
-  
+
 // 🦐 movimiento
 function loop(){
   gambas.forEach(g=>{
