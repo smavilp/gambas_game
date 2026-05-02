@@ -105,7 +105,7 @@ body {
 
 <h2>🦐 Gambas Game</h2>
 <h3>💰 Monedas: <span id="coins">20</span></h3>
-
+<h3>⭐ Prestigio: <span id="prestigio">0</span></h3>
 <h3>🎯 Objetivo</h3>
 <div id="goal" class="goal"></div>
 
@@ -338,10 +338,20 @@ function cruzar(){
   });
 
   // 🎯 check objetivo
-  if(distancia(c, objetivo) < 40){
-    alert("🎉 Objetivo logrado!");
-    generarObjetivo();
-  }
+if(distancia(c, objetivo) < 40){
+
+  alert("🎉 Objetivo logrado!");
+
+  // 💰 recompensa opcional
+  monedas += 10;
+  actualizarMonedas();
+
+  // ⭐ prestigio
+  prestigio += 1;
+  actualizarPrestigio();
+
+  generarObjetivo();
+}
 }
 
 // movimiento
@@ -381,7 +391,9 @@ function renovarPool(){
 
   generarPool();
 }
-  
+function actualizarPrestigio(){
+  document.getElementById("prestigio").innerText = prestigio;
+}  
 // init
 for(let i=0;i<8;i++) crearGambaPool();
 generarObjetivo();
