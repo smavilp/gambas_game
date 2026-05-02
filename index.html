@@ -10,6 +10,8 @@ body {
   color:#1b2a3a;
   text-align:center;
   font-family:Arial;
+  min-height: 100vh;
+  margin: 0;
 }
 
 .tank {
@@ -128,9 +130,17 @@ body {
 }
 
 #pool {
-  background:#ffffffaa;
-  backdrop-filter: blur(4px);
+  width:200px;
+  min-height:300px;
+
   border:2px dashed #aaccee;
+  padding:10px;
+
+  display:flex;
+  flex-direction: column; /* 🔥 CLAVE */
+  gap:20px;
+
+  align-items:center;
 }
 </style>
 
