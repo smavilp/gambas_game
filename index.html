@@ -26,18 +26,28 @@ body {
   width:20px;
   height:20px;
   position:absolute;
-  border-radius:4px;
   cursor:pointer;
+  border-radius:4px;
   display:flex;
   align-items:center;
+  justify-content:center;
+  transform-origin: center;
 }
 
 .tail {
   width:8px;
   height:8px;
   background:inherit;
-  margin-left:-4px;
-  animation: wag 0.4s infinite alternate;
+
+  position:absolute;
+  left:-6px; /* SIEMPRE atrás del cuerpo */
+
+  animation: wag 0.3s infinite alternate;
+}
+
+@keyframes wag {
+  0% { transform: rotate(-30deg); }
+  100% { transform: rotate(30deg); }
 }
 
 @keyframes wag {
@@ -210,6 +220,9 @@ function loop(){
 
     g.el.style.left = g.x + "px";
     g.el.style.top = g.y + "px";
+
+    let angle = Math.atan2(g.vy, g.vx);
+g.el.style.transform = `rotate(${angle}rad)`;
   });
 
   requestAnimationFrame(loop);
