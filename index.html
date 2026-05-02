@@ -100,6 +100,11 @@ body {
   margin:10px auto;
   border:2px solid white;
 }
+
+.pool-shrimp {
+  transform: scale(1.8);
+  cursor: pointer;
+}
 </style>
 
 </head>
@@ -107,17 +112,35 @@ body {
 
 <h2>🦐 Gambas Game</h2>
 
- <h3>🦐 Gambas disponibles</h3>
-<div id="pool" style="
-  width:600px;
-  margin:10px auto;
-  padding:10px;
-  border:2px dashed white;
+<div style="
   display:flex;
-  gap:10px;
   justify-content:center;
-  flex-wrap:wrap;
-"></div> 
+  gap:40px;
+  align-items:flex-start;
+">
+
+  <!-- 🦐 POOL -->
+  <div>
+    <h3>🦐 Gambas disponibles</h3>
+    <div id="pool" style="
+      width:200px;
+      min-height:300px;
+      border:2px dashed white;
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:center;
+    "></div>
+  </div>
+
+  <!-- 🐠 TANQUE -->
+  <div>
+    <h3>🐠 Tanque</h3>
+    <div class="tank" id="tank"></div>
+  </div>
+
+</div>
 
 <h3>🎯 Objetivo</h3>
 <div id="goal" class="goal"></div>
@@ -170,8 +193,8 @@ function crearGambaPool(){
   };
 
   let div = document.createElement("div");
-  div.className = "shrimp";
-
+  div.className = "shrimp pool-shrimp";
+  
   let color = rgb(g.color);
 
   // cola
@@ -196,7 +219,7 @@ function crearGambaPool(){
   let eye = document.createElement("div");
   eye.className = "eye";
   head.appendChild(eye);
-
+  div.style.transform = "rotate(0deg)";
   div.appendChild(head);
 
   // 👇 CLICK = meter al tanque
