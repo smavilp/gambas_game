@@ -138,6 +138,7 @@ let gambas = [];
 let seleccionadas = [];
 let monedas = 20;
 let objetivo;
+let objetivoTimer = null;
 
 function actualizarMonedas(){
   document.getElementById("coins").innerText = monedas;
@@ -158,8 +159,20 @@ function rgb(c){
 
 // 🎯 objetivo
 function generarObjetivo(){
+
   objetivo = randomColor();
   document.getElementById("goal").style.background = rgb(objetivo);
+
+  // 🔥 limpiar timer anterior
+  if(objetivoTimer){
+    clearTimeout(objetivoTimer);
+  }
+
+  // ⏳ nuevo timer de 8 min
+  objetivoTimer = setTimeout(() => {
+    alert("⏳ El objetivo cambió por tiempo");
+    generarObjetivo();
+  }, 480000); // 8 minutos
 }
 
 function distancia(a,b){
