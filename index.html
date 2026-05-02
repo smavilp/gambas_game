@@ -115,7 +115,7 @@ body {
     <h3>🦐 Mercado</h3>
     <div id="pool"></div>
   </div>
-
+<button onclick="renovarPool()">🔄 Pedido especial (15💰)</button>
   <div>
     <h3>🐠 Tanque</h3>
     <div class="tank" id="tank"></div>
@@ -225,10 +225,8 @@ function crearGambaPool(){
       vy:(Math.random()-0.5)*0.4
     });
 
-    crearGambaPool();
   });
 
-  pool.appendChild(div);
 }
 
 // 🐠 TANQUE
@@ -282,7 +280,16 @@ function crearGamba(g){
   g.el = div;
   gambas.push(g);
 }
+function generarPool(){
 
+  // limpiar pool
+  pool.innerHTML = "";
+
+  // crear 10 nuevas gambas
+  for(let i=0;i<10;i++){
+    crearGambaPool();
+  }
+}
 // 💸 vender
 function venderGambaTanque(){
 
@@ -355,9 +362,28 @@ function loop(){
 
   requestAnimationFrame(loop);
 }
+  
+setInterval
+  (() => {
+  generarPool();
+  alert("🔄 El mercado se ha renovado");
+}, 300000); // 5 minutos
 
+function renovarPool(){
+
+  if(monedas < 15){
+    alert("No tienes suficientes monedas");
+    return;
+  }
+
+  monedas -= 15;
+  actualizarMonedas();
+
+  generarPool();
+}
+  
 // init
-for(let i=0;i<10;i++) crearGambaPool();
+for(let i=0;i<8;i++) crearGambaPool();
 generarObjetivo();
 actualizarMonedas();
 loop();
