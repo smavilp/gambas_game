@@ -222,7 +222,10 @@ function loop(){
     g.el.style.top = g.y + "px";
 
     let angle = Math.atan2(g.vy, g.vx);
-g.el.style.transform = `rotate(${angle}rad)`;
+    g.el.style.transform = `rotate(${angle}rad)`;
+
+    g.vx += (Math.random()-0.5)*0.02;
+    g.vy += (Math.random()-0.5)*0.02;
   });
 
   requestAnimationFrame(loop);
