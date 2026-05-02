@@ -104,7 +104,7 @@ body {
 <body>
 
 <h2>🦐 Gambas Game</h2>
-<h3>💰 Monedas: <span id="coins">50</span></h3>
+<h3>💰 Monedas: <span id="coins">20</span></h3>
 
 <h3>🎯 Objetivo</h3>
 <div id="goal" class="goal"></div>
@@ -134,7 +134,7 @@ let pool = document.getElementById("pool");
 
 let gambas = [];
 let seleccionadas = [];
-let monedas = 50;
+let monedas = 20;
 let objetivo;
 
 function actualizarMonedas(){
@@ -286,7 +286,7 @@ function generarPool(){
   pool.innerHTML = "";
 
   // crear 10 nuevas gambas
-  for(let i=0;i<10;i++){
+  for(let i=0;i<8;i++){
     crearGambaPool();
   }
 }
