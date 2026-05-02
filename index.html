@@ -107,6 +107,18 @@ body {
 
 <h2>🦐 Gambas Game</h2>
 
+ <h3>🦐 Gambas disponibles</h3>
+<div id="pool" style="
+  width:600px;
+  margin:10px auto;
+  padding:10px;
+  border:2px dashed white;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+"></div> 
+
 <h3>🎯 Objetivo</h3>
 <div id="goal" class="goal"></div>
 
@@ -119,6 +131,7 @@ let tank = document.getElementById("tank");
 let gambas = [];
 let seleccionadas = [];
 let objetivo;
+let pool = document.getElementById("pool");
 
 // 🎨 color aleatorio
 function randomColor(){
@@ -147,6 +160,60 @@ function distancia(a,b){
 function generarObjetivo(){
   objetivo = randomColor();
   document.getElementById("goal").style.background = rgb(objetivo);
+}
+
+function crearGambaPool(){
+
+  let g = {
+    id: Date.now() + Math.random(),
+    color: randomColor()
+  };
+
+  let div = document.createElement("div");
+  div.className = "shrimp";
+
+  let color = rgb(g.color);
+
+  // cola
+  let tail = document.createElement("div");
+  tail.className = "tail";
+  tail.style.background = color;
+  div.appendChild(tail);
+
+  // segmentos
+  for(let i=0;i<2;i++){
+    let seg = document.createElement("div");
+    seg.className = "segment";
+    seg.style.background = color;
+    div.appendChild(seg);
+  }
+
+  // cabeza
+  let head = document.createElement("div");
+  head.className = "head";
+  head.style.background = color;
+
+  let eye = document.createElement("div");
+  eye.className = "eye";
+  head.appendChild(eye);
+
+  div.appendChild(head);
+
+  // 👇 CLICK = meter al tanque
+  div.onclick = () => {
+    pool.removeChild(div);
+
+    crearGamba({
+      id: g.id,
+      color: g.color,
+      x: Math.random()*580,
+      y: Math.random()*280,
+      vx:(Math.random()-0.5)*0.4,
+      vy:(Math.random()-0.5)*0.4
+    });
+  };
+
+  pool.appendChild(div);
 }
 
 // 🦐 crear gamba
@@ -268,6 +335,10 @@ function cruzar(){
   seleccionadas = [];
 }
 
+for(let i=0;i<6;i++){
+  crearGambaPool();
+}
+  
 // 🦐 movimiento
 function loop(){
   gambas.forEach(g=>{
@@ -290,9 +361,6 @@ function loop(){
   requestAnimationFrame(loop);
 }
 
-// 🟢 inicial
-crearGamba({id:1,color:{r:255,g:0,b:0},x:100,y:100,vx:0.3,vy:0.2});
-crearGamba({id:2,color:{r:0,g:0,b:255},x:300,y:150,vx:-0.3,vy:0.2});
 
 generarObjetivo();
 loop();
