@@ -187,10 +187,9 @@ function distancia(a,b){
 function crearGambaPool(){
 
   let g = {
-  id: crypto.randomUUID(),
-  color: randomColor(),
-  sexo: Math.random() < 0.5 ? "♂" : "♀"
-};
+    id: crypto.randomUUID(),
+    color: randomColor()
+  };
 
   let div = document.createElement("div");
   div.className = "shrimp pool-shrimp";
@@ -212,15 +211,6 @@ function crearGambaPool(){
   let head = document.createElement("div");
   head.className = "head";
   head.style.background = color;
-  let sexoLabel = document.createElement("div");
-  sexoLabel.innerText = g.sexo;
-  sexoLabel.style.fontSize = "8px";
-  sexoLabel.style.position = "absolute";
-  sexoLabel.style.top = "-6px";
-
-
-
-  head.appendChild(sexoLabel);
 
   let eye = document.createElement("div");
   eye.className = "eye";
@@ -244,7 +234,6 @@ function crearGambaPool(){
     crearGamba({
       id: g.id,
       color: g.color,
-      sexo:g.sexo,
       x: Math.random()*580,
       y: Math.random()*280,
       vx:(Math.random()-0.5)*0.4,
@@ -278,20 +267,11 @@ function crearGamba(g){
   let head = document.createElement("div");
   head.className = "head";
   head.style.background = color;
-  
+
   let eye = document.createElement("div");
   eye.className = "eye";
   head.appendChild(eye);
-  let sexoLabel = document.createElement("div");
-  sexoLabel.innerText = g.sexo;
 
-  sexoLabel.style.fontSize = "10px";
-  sexoLabel.style.position = "absolute";
-  sexoLabel.style.top = "-8px";
-  sexoLabel.style.left = "2px";
-  sexoLabel.style.color = g.sexo === "♂" ? "blue" : "deeppink";
-
-  head.appendChild(sexoLabel);
   div.appendChild(head);
 
   // selección (máx 2)
@@ -361,36 +341,16 @@ function cruzar(){
 
   let [a,b] = seleccionadas;
 
-  if(a.sexo === b.sexo){
-    alert("❌ Estas gambas no son compatibles");
-    return;
-  }
-
   let c = mezclar(a.color,b.color);
 
   crearGamba({
     id:Date.now(),
     color:c,
-    sexo: Math.random() < 0.5 ? "♂" : "♀",
     x:Math.random()*580,
     y:Math.random()*280,
     vx:(Math.random()-0.5)*0.4,
     vy:(Math.random()-0.5)*0.4
   });
-
-  if(distancia(c, objetivo) < 40){
-
-    alert("🎉 Objetivo logrado!");
-
-    monedas += 10;
-    actualizarMonedas();
-
-    prestigio += 1;
-    actualizarPrestigio();
-
-    generarObjetivo();
-  }
-}
 
   // 🎯 check objetivo
 if(distancia(c, objetivo) < 40){
