@@ -23,31 +23,61 @@ body {
 }
 
 .shrimp {
-  width:26px;
+  position:absolute;
+  width:30px;
   height:14px;
 
-  position:absolute;
-  cursor:pointer;
-
-  border-radius:6px; /* forma más orgánica */
   display:flex;
   align-items:center;
-  justify-content:center;
 
-  transform-origin: center;
-  
-  box-shadow: inset -3px 0 0 rgba(0,0,0,0.2);
+  transform-origin:center;
+  cursor:pointer;
+}
+
+.segment {
+  width:8px;
+  height:12px;
+  background:inherit;
+  border-radius:3px;
+  margin-right:1px;
+}
+
+.head {
+  width:10px;
+  height:12px;
+  background:inherit;
+  border-radius:4px;
+  position:relative;
+}
+
+.eye {
+  width:3px;
+  height:3px;
+  background:black;
+  border-radius:50%;
+  position:absolute;
+  right:2px;
+  top:3px;
 }
 
 .tail {
   width:6px;
   height:6px;
   background:inherit;
+  border-radius:2px;
 
-  position:absolute;
-  left:-8px;
+  margin-right:2px;
 
-  animation: wag 0.3s infinite alternate;
+  animation: wag 0.25s infinite alternate;
+}
+
+@keyframes wag {
+  0% { transform: rotate(-30deg); }
+  100% { transform: rotate(30deg); }
+}
+
+.selected {
+  outline:2px solid yellow;
 }
 
 @keyframes wag {
@@ -121,15 +151,39 @@ function generarObjetivo(){
 
 // 🦐 crear gamba
 function crearGamba(g){
+
   let div = document.createElement("div");
   div.className = "shrimp";
-  div.style.background = rgb(g.color);
 
+  let color = rgb(g.color);
+
+  // 🐟 cola
   let tail = document.createElement("div");
   tail.className = "tail";
+  tail.style.background = color;
   div.appendChild(tail);
 
-  div.onclick = () => toggle(g);
+  // 🧱 segmentos
+  for(let i=0;i<2;i++){
+    let seg = document.createElement("div");
+    seg.className = "segment";
+    seg.style.background = color;
+    div.appendChild(seg);
+  }
+
+  // 🦐 cabeza
+  let head = document.createElement("div");
+  head.className = "head";
+  head.style.background = color;
+
+  // 👀 ojo
+  let eye = document.createElement("div");
+  eye.className = "eye";
+  head.appendChild(eye);
+
+  div.appendChild(head);
+
+  div.onclick = ()=>toggle(g);
 
   tank.appendChild(div);
 
